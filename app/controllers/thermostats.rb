@@ -4,6 +4,11 @@ class ThermostatAPI < Sinatra::Base
     response.headers['Access-Control-Allow-Origin'] = '*'
   end
 
+  def get_current_temperature
+    thermostat = Thermostat.get(@thermostat.id)
+    thermostat.temperature
+  end
+
   get '/thermostats' do
     content_type :json
     Thermostat.all.to_json
@@ -18,6 +23,24 @@ class ThermostatAPI < Sinatra::Base
     else
       "Authentication Error - Check your User Id & API Key".to_json
     end
+  end
+
+  get '/thermostats/:id' do
+    Thermostat.get(params[:id]).to_json
+  end
+
+  post '/thermostats/:id/temperature/increase' do
+    @thermostat = Thermostat.get(params[:id])
+    current_temperature = get_current_temperature
+    @thermostat.update(:temperature => current_temperature += 1)
+    @thermostat.to_json
+  end
+
+  post '/thermostats/:id/temperature/decrease' do
+    @thermostat = Thermostat.get(params[:id])
+    current_temperature = get_current_temperature
+    @thermostat.update(:temperature => current_temperature -= 1)
+    @thermostat.to_json
   end
 
   
