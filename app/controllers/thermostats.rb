@@ -47,7 +47,7 @@ class ThermostatAPI < Sinatra::Base
       return_message[:status] = 'error'
       return_message[:message] = 'Invalid ID. Thermostat not found'
     end
-    return_message.to_json
+    return_message.to_json 
   end
 
   post '/thermostats/:id/temperature/increase' do
@@ -69,7 +69,5 @@ class ThermostatAPI < Sinatra::Base
     return_message[:thermostat] = @thermostat
     return_message.to_json
   end
-
-  
 
 end

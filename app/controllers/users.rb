@@ -10,4 +10,3 @@ class ThermostatAPI < Sinatra::Base
   end
 
 end
-
