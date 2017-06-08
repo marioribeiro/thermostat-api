@@ -23,8 +23,9 @@ class ThermostatAPI < Sinatra::Base
 
   post '/thermostats' do
     return_message = {}
-    content_type :json
+    p params
     user = User.authenticate(params[:user_id], params[:api_key])
+    user
     if user
       session[:user_id] = user.id
       thermostat = Thermostat.create(user_id: session[:user_id])
@@ -33,8 +34,8 @@ class ThermostatAPI < Sinatra::Base
     else
       return_message[:status] = 'error'
       return_message[:message] = 'Please check your User ID and API Key'
-      return_message.to_json
     end
+    return_message.to_json
   end
 
   get '/thermostats/:id' do
