@@ -23,7 +23,7 @@ class ThermostatAPI < Sinatra::Base
 
   post '/thermostats' do
     return_message = {}
-    p params
+    params
     user = User.authenticate(params[:user_id], params[:api_key])
     user
     if user
