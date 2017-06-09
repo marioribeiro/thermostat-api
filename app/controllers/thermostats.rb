@@ -2,6 +2,7 @@ class ThermostatAPI < Sinatra::Base
 
   MAX_TEMP_PSM = 25
   MAX_TEMP = 32
+  MIN_TEMP = 10
 
   before do
     response.headers['Access-Control-Allow-Origin'] = '*'
@@ -82,9 +83,14 @@ class ThermostatAPI < Sinatra::Base
     return_message = {}
     @thermostat = Thermostat.get(params[:id])
     current_temperature = get_current_temperature
-    @thermostat.update(:temperature => current_temperature -= 1)
-    return_message[:status] = 'success'
-    return_message[:thermostat] = @thermostat
+    if current_temperature > MIN_TEMP
+      @thermostat.update(:temperature => current_temperature -= 1)
+      return_message[:status] = 'success'
+      return_message[:thermostat] = @thermostat
+    else
+      return_message[:status] = 'error'
+      return_message[:message] = 'thermostat at minimum temperature'
+    end
     return_message.to_json
   end
 
