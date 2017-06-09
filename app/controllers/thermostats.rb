@@ -111,7 +111,7 @@ class ThermostatAPI < Sinatra::Base
     return_message.to_json
   end
 
-  post '/thermostats/:id/power_save_mode' do
+  post '/thermostats/:id/power-save-mode' do
     return_message = {}
     @thermostat = Thermostat.get(params[:id])
     toggle_power_save_mode
