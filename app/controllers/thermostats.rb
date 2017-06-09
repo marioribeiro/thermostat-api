@@ -18,6 +18,15 @@ class ThermostatAPI < Sinatra::Base
     thermostat.temperature
   end
 
+  def toggle_power_save_mode
+    thermostat = Thermostat.get(@thermostat.id)
+    if power_save_mode?
+      @thermostat.update(:power_save_mode => false)
+    else
+      @thermostat.update(:power_save_mode => true)
+    end
+  end
+  
   get '/thermostats' do
     return_message = {}
     if Thermostat.count == 0
@@ -91,6 +100,15 @@ class ThermostatAPI < Sinatra::Base
       return_message[:status] = 'error'
       return_message[:message] = 'thermostat at minimum temperature'
     end
+    return_message.to_json
+  end
+
+  post '/thermostats/:id/power_save_mode' do
+    return_message = {}
+    @thermostat = Thermostat.get(params[:id])
+    toggle_power_save_mode
+    return_message[:status] = 'success'
+    return_message[:thermostat] = @thermostat
     return_message.to_json
   end
 
