@@ -77,7 +77,7 @@ class ThermostatAPI < Sinatra::Base
       @thermostat.update(:temperature => current_temperature += 1)
       return_message[:status] = 'success'
       return_message[:thermostat] = @thermostat
-    elsif !power_save_mode? && current_temperature + 1 < MAX_TEMP
+    elsif !power_save_mode? && current_temperature < MAX_TEMP
       @thermostat.update(:temperature => current_temperature += 1)
       return_message[:status] = 'success'
       return_message[:thermostat] = @thermostat
