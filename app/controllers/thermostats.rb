@@ -21,9 +21,17 @@ class ThermostatAPI < Sinatra::Base
   def toggle_power_save_mode
     thermostat = Thermostat.get(@thermostat.id)
     if power_save_mode?
-      @thermostat.update(:power_save_mode => false)
+      if get_current_temperature > MAX_TEMP_PSM
+        @thermostat.update(:temperature => MAX_TEMP, :power_save_mode => false)
+      else
+        @thermostat.update(:power_save_mode => false)
+      end
     else
-      @thermostat.update(:power_save_mode => true)
+      if get_current_temperature > MAX_TEMP_PSM
+        @thermostat.update(:temperature => MAX_TEMP_PSM, :power_save_mode => true)
+      else
+        @thermostat.update(:power_save_mode => true)
+      end
     end
   end
   
